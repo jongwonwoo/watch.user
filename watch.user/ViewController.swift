@@ -40,6 +40,29 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     let faceDetectionRequest = VNSequenceRequestHandler()
     var previewLayer: AVCaptureVideoPreviewLayer!
     
+    lazy var emotionClassificationRequest: VNCoreMLRequest = {
+        // Load the ML model through its generated class and create a Vision request for it.
+        do {
+            // from https://github.com/cocoa-ai/FacesVisionDemo
+            let model = try VNCoreMLModel(for: CNNEmotions().model)
+            return VNCoreMLRequest(model: model, completionHandler: self.handleEmotionClassification)
+        } catch {
+            fatalError("can't load Vision ML model: \(error)")
+        }
+    }()
+    
+    func handleEmotionClassification(request: VNRequest, error: Error?) {
+        guard let observations = request.results as? [VNClassificationObservation]
+            else { fatalError("unexpected result type from VNCoreMLRequest") }
+        guard let best = observations.first
+            else { fatalError("can't get best result") }
+        
+        DispatchQueue.main.async {
+            print("\(best.identifier)")
+            self.emojiLabel.text = "\(best.identifier) (\(best.confidence))"
+        }
+    }
+    
     var frontCamera: AVCaptureDevice? = {
         return AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: .front)
     }()
@@ -55,10 +78,10 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         view.addSubview(self.segmented);
         self.didTapToggle(sender: self.segmented)
         
-        emojiLabel.frame = CGRect(x: self.view.frame.width / 2.0 - 30.0, y: self.view.frame.height - 90.0, width: 100, height: 100);
+        emojiLabel.frame = CGRect(x: 0, y: self.view.frame.height - 90.0, width: self.view.frame.width, height: 100);
         emojiLabel.text = "🙃"
-        emojiLabel.font = UIFont(name: emojiLabel.font.fontName, size: 60)
-        emojiLabel.sizeToFit()
+        emojiLabel.font = UIFont(name: emojiLabel.font.fontName, size: 20)
+        emojiLabel.backgroundColor = .white
         view.addSubview(emojiLabel);
         
         distanceView.backgroundColor = UIColor.blue
@@ -156,7 +179,7 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         
         if sender.selectedSegmentIndex == 0 {
             self.tableView.isHidden = false
-            self.emojiLabel.isHidden = true
+            self.emojiLabel.isHidden = false
             shapeLayer.removeFromSuperlayer()
             self.distanceView.isHidden = true
         } else if sender.selectedSegmentIndex == 1 {
@@ -260,11 +283,13 @@ extension ViewController {
         try? faceDetectionRequest.perform([faceDetection], on: image)
         if let results = faceDetection.results as? [VNFaceObservation] {
             if !results.isEmpty {
-                faceLandmarks.inputFaceObservations = results
-                detectLandmarks(on: image)
-                
-                DispatchQueue.main.async {
-                    self.shapeLayer.sublayers?.removeAll()
+                // Run the Core ML MNIST classifier -- results in handleClassification method
+                let handler = VNImageRequestHandler(ciImage: image)
+                do {
+                    print("detectFace")
+                    try handler.perform([emotionClassificationRequest])
+                } catch {
+                    print(error)
                 }
             }
         }
@@ -466,20 +491,20 @@ extension ViewController {
     }
     
     func liveStream() {
-        let view = MessageView.viewFromNib(layout: .cardView)
-        view.configureTheme(.success)
-        view.configureDropShadow()
-        view.button!.removeFromSuperview()
-        view.configureContent(title: "You're live", body: "74 friends are watching you right now", iconText: "📸")
-        
-        var config = SwiftMessages.Config()
-        
-        config.presentationStyle = .bottom
-        config.duration = .forever
-        
-        config.interactiveHide = false
-        config.preferredStatusBarStyle = .lightContent
-        SwiftMessages.show(config: config, view: view)
+//        let view = MessageView.viewFromNib(layout: .cardView)
+//        view.configureTheme(.success)
+//        view.configureDropShadow()
+//        view.button!.removeFromSuperview()
+//        view.configureContent(title: "You're live", body: "74 friends are watching you right now", iconText: "📸")
+//
+//        var config = SwiftMessages.Config()
+//
+//        config.presentationStyle = .bottom
+//        config.duration = .forever
+//
+//        config.interactiveHide = false
+//        config.preferredStatusBarStyle = .lightContent
+//        SwiftMessages.show(config: config, view: view)
     }
 }
 

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C7CA0571FB2933D00C487DE /* AgeNet.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0C7CA0541FB2932600C487DE /* AgeNet.mlmodel */; };
+		0C7CA0581FB2933D00C487DE /* GenderNet.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0C7CA0551FB2932800C487DE /* GenderNet.mlmodel */; };
+		0C7CA0591FB2933D00C487DE /* CNNEmotions.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0C7CA0561FB2933D00C487DE /* CNNEmotions.mlmodel */; };
 		CA6ECDBB1F954E9500000BF3 /* pexels-photo-305243.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB41F954DCA00000BF3 /* pexels-photo-305243.jpeg */; };
 		CA6ECDBC1F954E9500000BF3 /* pexels-photo-305249.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB51F954DCA00000BF3 /* pexels-photo-305249.jpeg */; };
 		CA6ECDBD1F954E9500000BF3 /* pexels-photo-305250.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB61F954DCA00000BF3 /* pexels-photo-305250.jpeg */; };
@@ -24,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C7CA0541FB2932600C487DE /* AgeNet.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AgeNet.mlmodel; sourceTree = "<group>"; };
+		0C7CA0551FB2932800C487DE /* GenderNet.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = GenderNet.mlmodel; sourceTree = "<group>"; };
+		0C7CA0561FB2933D00C487DE /* CNNEmotions.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CNNEmotions.mlmodel; sourceTree = "<group>"; };
 		9440C325C901077520303EA7 /* Pods_watch_user.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_watch_user.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA6ECDB41F954DCA00000BF3 /* pexels-photo-305243.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305243.jpeg"; sourceTree = "<group>"; };
 		CA6ECDB51F954DCA00000BF3 /* pexels-photo-305249.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305249.jpeg"; sourceTree = "<group>"; };
@@ -56,6 +62,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C7CA0531FB2930700C487DE /* coreml */ = {
+			isa = PBXGroup;
+			children = (
+				0C7CA0541FB2932600C487DE /* AgeNet.mlmodel */,
+				0C7CA0561FB2933D00C487DE /* CNNEmotions.mlmodel */,
+				0C7CA0551FB2932800C487DE /* GenderNet.mlmodel */,
+			);
+			path = coreml;
+			sourceTree = "<group>";
+		};
 		766AF35B5A477C876913C129 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +124,7 @@
 		E5E2CD511EFA419000EBCCBF /* watch.user */ = {
 			isa = PBXGroup;
 			children = (
+				0C7CA0531FB2930700C487DE /* coreml */,
 				CA6ECDB31F954DCA00000BF3 /* images */,
 				E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */,
 				E5E2CD541EFA419000EBCCBF /* ViewController.swift */,
@@ -212,9 +229,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-watch.user/Pods-watch.user-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftMessages/SwiftMessages.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftMessages.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -227,13 +247,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-watch.user-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CEF891D8A75977132038AD92 /* [CP] Copy Pods Resources */ = {
@@ -258,8 +281,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C7CA0591FB2933D00C487DE /* CNNEmotions.mlmodel in Sources */,
 				E56B7E711EFD261E006704F3 /* CGRect+Scaled.swift in Sources */,
 				E5E2CD551EFA419000EBCCBF /* ViewController.swift in Sources */,
+				0C7CA0571FB2933D00C487DE /* AgeNet.mlmodel in Sources */,
+				0C7CA0581FB2933D00C487DE /* GenderNet.mlmodel in Sources */,
 				E5E2CD531EFA419000EBCCBF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,7 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = N8X438SEU2;
+				DEVELOPMENT_TEAM = QFKRB33RPM;
 				INFOPLIST_FILE = "$(SRCROOT)/watch.user/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.krausefx.watch.user;
@@ -414,7 +440,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = N8X438SEU2;
+				DEVELOPMENT_TEAM = QFKRB33RPM;
 				INFOPLIST_FILE = "$(SRCROOT)/watch.user/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.krausefx.watch.user;
